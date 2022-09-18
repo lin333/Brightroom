@@ -44,6 +44,7 @@ public struct L10nStorage {
   public var editFade = "Fade"
   public var editClarity = "Clarity"
   public var editSharpen = "Sharpen"
+  public var editSharpen2 = "LBJTest"
   
   public var clear = "Clear"
   
