@@ -52,79 +52,79 @@ public enum EditMenu: CaseIterable {
     public let scrollView = UIScrollView()
     
     public lazy var adjustmentButton: ButtonView = {
-      let button = ButtonView(name: L10n.editAdjustment + "\n裁切", image: UIImage(named: "adjustment", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editAdjustment + "\n裁切", image: UIImage(named: "adjustment", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(adjustment), for: .touchUpInside)
       return button
     }()
     
     public lazy var maskButton: ButtonView = {
-      let button = ButtonView(name: L10n.editMask + "\n蒙板", image: UIImage(named: "mask", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editMask + "\n蒙板", image: UIImage(named: "mask", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(masking), for: .touchUpInside)
       return button
     }()
     
     public lazy var exposureButton: ButtonView = {
-      let button = ButtonView(name: L10n.editBrightness + "\n亮度", image: UIImage(named: "brightness", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editBrightness + "\n亮度", image: UIImage(named: "brightness", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(brightness), for: .touchUpInside)
       return button
     }()
     
     public lazy var gaussianBlurButton: ButtonView = {
-      let button = ButtonView(name: L10n.editBlur + "\n模糊", image: UIImage(named: "blur", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editBlur + "\n模糊", image: UIImage(named: "blur", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(blur), for: .touchUpInside)
       return button
     }()
     
     public lazy var contrastButton: ButtonView = {
-      let button = ButtonView(name: L10n.editContrast + "\n对比度", image: UIImage(named: "contrast", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editContrast + "\n对比度", image: UIImage(named: "contrast", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(contrast), for: .touchUpInside)
       return button
     }()
     
     public lazy var temperatureButton: ButtonView = {
-      let button = ButtonView(name: L10n.editTemperature + "\n色温", image: UIImage(named: "temperature", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editTemperature + "\n色温", image: UIImage(named: "temperature", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(warmth), for: .touchUpInside)
       return button
     }()
     
     public lazy var saturationButton: ButtonView = {
-      let button = ButtonView(name: L10n.editSaturation + "\n饱和度", image: UIImage(named: "saturation", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editSaturation + "\n饱和度", image: UIImage(named: "saturation", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(saturation), for: .touchUpInside)
       return button
     }()
     
     public lazy var highlightsButton: ButtonView = {
-      let button = ButtonView(name: L10n.editHighlights + "\n高光", image: UIImage(named: "highlights", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editHighlights + "\n高光", image: UIImage(named: "highlights", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(highlights), for: .touchUpInside)
       return button
     }()
     
     public lazy var shadowsButton: ButtonView = {
-      let button = ButtonView(name: L10n.editShadows + "\n阴影", image: UIImage(named: "shadows", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editShadows + "\n阴影", image: UIImage(named: "shadows", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(shadows), for: .touchUpInside)
       return button
     }()
     
     public lazy var vignetteButton: ButtonView = {
-      let button = ButtonView(name: L10n.editVignette + "\n暗角", image: UIImage(named: "vignette", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editVignette + "\n暗角", image: UIImage(named: "vignette", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(vignette), for: .touchUpInside)
       return button
     }()
     
     public lazy var fadeButton: ButtonView = {
-      let button = ButtonView(name: L10n.editFade + "\n褪色", image: UIImage(named: "fade", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editFade + "\n褪色", image: UIImage(named: "fade", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(fade), for: .touchUpInside)
       return button
     }()
     
     public lazy var sharpenButton: ButtonView = {
-      let button = ButtonView(name: L10n.editSharpen + "\n锐化", image: UIImage(named: "sharpen", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editSharpen + "\n锐化", image: UIImage(named: "sharpen", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(sharpen), for: .touchUpInside)
       return button
     }()
     
     public lazy var clarityButton: ButtonView = {
-      let button = ButtonView(name: L10n.editClarity + "\n清晰度", image: UIImage(named: "structure", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editClarity + "\n清晰度", image: UIImage(named: "structure", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(clarity), for: .touchUpInside)
       return button
     }()
@@ -402,7 +402,7 @@ public enum EditMenu: CaseIterable {
           nameLabel.textColor = Style.default.black
           nameLabel.textAlignment = .center
           nameLabel.numberOfLines = 0
-            
+
           changesMarkView.layer.cornerRadius = 2
           changesMarkView.backgroundColor = Style.default.black
           changesMarkView.isHidden = true

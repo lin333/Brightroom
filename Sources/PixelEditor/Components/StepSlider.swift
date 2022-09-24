@@ -37,6 +37,15 @@ public final class StepSlider : UIControl {
     }
   }
 
+  public var isStepLabelHidden: Bool {
+    get {
+      return internalSlider.stepLabel.isHidden
+    }
+    set {
+      internalSlider.stepLabel.isHidden = newValue
+    }
+  }
+
   private var minStep: Int = -100
 
   private var maxStep: Int = 100
@@ -145,6 +154,12 @@ public final class StepSlider : UIControl {
     __didChangeValue()
 
   }
+    
+    public func setSliderValue(value:Float)
+    {
+        internalSlider.value = value
+        __didChangeValue()
+    }
 
   public func transition(min: Double, max: Double) -> Double {
 
@@ -323,6 +338,9 @@ private final class _StepSlider: UISlider {
     label.textColor = UIColor.black
     label.textAlignment = .center
 
+    //20210329
+    label.isHidden = true;
+    
     self.addSubview(label)
   }
 

@@ -122,42 +122,30 @@ public enum ColorCube {
             let position = bitmap
               .advanced(by: bitmapOffest)
 
-            if (array.count-1 > dataOffset) {
-              array[dataOffset + 0] = Float(position
-                .advanced(by: 0)
-                .pointee) / 255
-            }
-            
+              if (array.count-1 > dataOffset) {
+                array[dataOffset + 0] = Float(position
+                  .advanced(by: 0)
+                  .pointee) / 255
+              }
+              
 
-            if (array.count-1 > dataOffset + 1) {
-              array[dataOffset + 1] = Float(position
-                    .advanced(by: 1)
+              if (array.count-1 > dataOffset + 1) {
+                array[dataOffset + 1] = Float(position
+                      .advanced(by: 1)
+                      .pointee) / 255
+              }
+                
+              if (array.count-1 > dataOffset + 2) {
+                array[dataOffset + 2] = Float(position
+                    .advanced(by: 2)
                     .pointee) / 255
-            }
-              
-            if (array.count-1 > dataOffset + 2) {
-              array[dataOffset + 2] = Float(position
-                  .advanced(by: 2)
-                  .pointee) / 255
-            }
+              }
 
-            if (array.count-1 > dataOffset + 3) {
-              array[dataOffset + 3] = Float(position
-                  .advanced(by: 3)
-                  .pointee) / 255
-            }
-              
-//            array[dataOffset + 1] = Float(position
-//              .advanced(by: 1)
-//              .pointee) / 255
-//
-//            array[dataOffset + 2] = Float(position
-//              .advanced(by: 2)
-//              .pointee) / 255
-//
-//            array[dataOffset + 3] = Float(position
-//              .advanced(by: 3)
-//              .pointee) / 255
+              if (array.count-1 > dataOffset + 3) {
+                array[dataOffset + 3] = Float(position
+                    .advanced(by: 3)
+                    .pointee) / 255
+              }
 
             bitmapOffest += 4
 

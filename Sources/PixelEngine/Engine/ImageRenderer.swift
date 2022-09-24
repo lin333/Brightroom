@@ -48,11 +48,12 @@ public final class ImageRenderer {
     self.source = source
   }
 
-  public func render(resolution: Resolution = .full) -> UIImage {
+  public func render(resolution: Resolution = .full,filterAlpha:CGFloat) -> UIImage {
 
     let resultImage: CIImage = {
 
       let targetImage = source.image
+        print(targetImage)
       let sourceImage: CIImage
 
       if var croppingRect = edit.croppingRect {
@@ -67,7 +68,7 @@ public final class ImageRenderer {
       }
 
       let result = edit.modifiers.reduce(sourceImage, { image, modifier in
-        return modifier.apply(to: image, sourceImage: sourceImage)
+        return modifier.apply(to: image, sourceImage: sourceImage,filterAlpha:filterAlpha)
       })
 
       return result

@@ -22,6 +22,7 @@ import Foundation
 
 import PixelEngine
 
+
 open class ColorCubeControlBase : ControlBase {
   
   public required init(
@@ -48,6 +49,8 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
   public var current: FilterColorCube?
 
   public lazy var collectionView: UICollectionView = self.makeCollectionView()
+    
+  public lazy var sliderSensiti :StepSlider = self.makeSlider();
 
   private let previews: [PreviewFilterColorCube]
   
@@ -73,6 +76,8 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
 
     backgroundColor = Style.default.control.backgroundColor
 
+    addSubview(sliderSensiti);
+    
     addSubview(collectionView)
     
     let itemSize = (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize
@@ -91,6 +96,28 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
     collectionView.delegate = self
 
   }
+    
+    @objc
+    private func sliderSensitiValueChanged() {
+        //let value =  sliderSensiti.value;
+        let value = sliderSensiti.transition(in: FilterGaussianBlur.range)
+        print("sliderSensitiValueChanged:"+String(value));
+        context.action(.setFilterAlpha(alpha: Float(value/100)));
+        context.action(.commit)
+    }
+    open func makeSlider()->StepSlider{
+        let slider = StepSlider(frame: .zero);//UISlider();
+        slider.mode = .plus
+        slider.frame = CGRect(x:UIScreen.main.bounds.size.width/4, y: 0, width: UIScreen.main.bounds.size.width/2, height: 20);
+        //slider.minimumTrackTintColor = .lightGray;
+        //slider.maximumTrackTintColor = .lightGray;
+        //slider.setThumbImage(UIImage.init(named: "filteradjusticon"), for: .normal);
+        //slider.value = 1.0;
+        slider.isHidden = true;
+        slider.setSliderValue(value: 1);
+        slider.addTarget(self, action: #selector(sliderSensitiValueChanged), for: .valueChanged)
+        return slider;
+    }
 
   open func makeCollectionView() -> UICollectionView {
 
@@ -190,9 +217,11 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
     
     switch Section.allCases[indexPath.section] {
     case .original:
+        self.sliderSensiti.isHidden = true;
       context.action(.setFilter( { $0.colorCube = nil }))
       context.action(.commit)
     case .selections:
+        self.sliderSensiti.isHidden = false;
       let filter = previews[indexPath.item]
       context.action(.setFilter( { $0.colorCube = filter.filter }))
       context.action(.commit)
@@ -242,7 +271,7 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
       layout: do {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        
+
         contentView.addSubview(nameLabel)
         contentView.addSubview(imageView)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -351,7 +380,6 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
     open func set(preview: PreviewFilterColorCube) {
       
       self.preview = preview
-
       nameLabel.text = preview.filter.name
       imageView.image = UIImage(ciImage: preview.image, scale: contentScaleFactor, orientation: .up)
     }

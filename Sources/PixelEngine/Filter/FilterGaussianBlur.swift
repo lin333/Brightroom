@@ -31,7 +31,7 @@ public struct FilterGaussianBlur : Filtering, Equatable, Codable {
 
   }
 
-  public func apply(to image: CIImage, sourceImage: CIImage) -> CIImage {
+  public func apply(to image: CIImage, sourceImage: CIImage,filterAlpha:CGFloat) -> CIImage {
 
     let radius = RadiusCalculator.radius(value: value, max: FilterGaussianBlur.range.max, imageExtent: image.extent)
 

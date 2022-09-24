@@ -30,7 +30,7 @@ public struct FilterHighlightShadowTint : Filtering, Equatable {
     
   }
   
-  public func apply(to image: CIImage, sourceImage: CIImage) -> CIImage {
+  public func apply(to image: CIImage, sourceImage: CIImage,filterAlpha:CGFloat) -> CIImage {
     
     let highlight = CIFilter(
       name: "CIConstantColorGenerator",

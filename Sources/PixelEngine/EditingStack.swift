@@ -43,6 +43,8 @@ open class EditingStack {
   private(set) public var cubeFilterPreviewSourceImage: CIImage!
   
   private(set) public var previewImage: CIImage?
+    
+  public var filterAlpha:CGFloat = 1.0
 
   private(set) public var originalPreviewImage: CIImage? {
     didSet {
@@ -105,7 +107,7 @@ open class EditingStack {
     self.preferredPreviewSize = previewSize
 
     self.adjustmentImage = source.image
-
+    self.filterAlpha = 1.0
     self.edits = [.init()]
     
     initialCrop()
@@ -117,7 +119,7 @@ open class EditingStack {
     updatePreviewFilterSizeImage: do {
       let smallSizeImage = ImageTool.resize(
         to: Geometry.sizeThatAspectFit(
-          aspectRatio: CGSize(width: 1, height: 1),
+            aspectRatio: CGSize(width: aspectRatio.width, height: aspectRatio.height),
           boundingSize: CGSize(
             width: 60 * targetScreenScale,
             height: 60 * targetScreenScale
@@ -176,10 +178,18 @@ open class EditingStack {
   }
 
   public func set(filters: (inout Edit.Filters) -> Void) {
+    print("set(filters...");
     applyIfChanged {
       filters(&$0.filters)
     }
   }
+    
+    public func setFilterAlpha(alpha:Float)
+    {
+        print("setFilterAlpha--1--:"+String(alpha));
+        filterAlpha = CGFloat(alpha);
+        updatePreviewImage()
+    }
 
   public func setAdjustment(cropRect: CGRect) {
 
@@ -223,7 +233,7 @@ open class EditingStack {
   }
 
   public func set(availableColorCubeFilters: [FilterColorCube]) {
-    
+    print("set(availableColorCubeFilters...");
     self.availableColorCubeFilters = availableColorCubeFilters.concurrentMap { item in
       let r = PreviewFilterColorCube.init(sourceImage: cubeFilterPreviewSourceImage, filter: item)
       r.preheat()
@@ -264,17 +274,22 @@ open class EditingStack {
   }
 
   private func updatePreviewImage() {
-
+    print("updatePreviewImage..");
     guard let sourceImage = originalPreviewImage else {
       previewImage = nil
       return
     }
+    if(self.filterAlpha==1.0)
+    {
+        print("updatePreviewImage--filterAlpha:1.0")
+    }else{
+        print("updatePreviewImage--filterAlpha:is not 1.0")
+    }
     
-    let filters = self.currentEdit
-      .makeFilters()
+    let filters = self.currentEdit.makeFilters()
     
     let result = filters.reduce(sourceImage) { (image, filter) -> CIImage in
-      filter.apply(to: image, sourceImage: sourceImage)
+        filter.apply(to: image, sourceImage: sourceImage,filterAlpha:self.filterAlpha)
     }
     
     self.previewImage = result
@@ -293,7 +308,7 @@ open class SquareEditingStack : EditingStack {
 
   open override func initialCrop() {
     let cropRect = Geometry.rectThatAspectFit(
-      aspectRatio: .init(width: 1, height: 1),
+        aspectRatio: .init(width: source.image.extent.size.width, height: source.image.extent.size.height),
       boundingRect: source.image.extent
     )
     
@@ -343,9 +358,11 @@ extension EditingStack {
           temperature,
           highlights,
           shadows,
-          saturation,
+          //saturation,
+            colorCube,
           contrast,
-          colorCube,
+          //colorCube,
+            saturation,
           
           // After
           sharpen,

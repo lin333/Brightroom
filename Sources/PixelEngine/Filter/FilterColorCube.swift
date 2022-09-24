@@ -34,7 +34,7 @@ public struct PreviewFilterColorCube : Equatable {
 
   init(sourceImage: CIImage, filter: FilterColorCube) {
     self.filter = filter
-    self.image = filter.apply(to: sourceImage, sourceImage: sourceImage)
+    self.image = filter.apply(to: sourceImage, sourceImage: sourceImage,filterAlpha:1.0)
   }
 
   public func preheat() {
@@ -55,6 +55,10 @@ public struct FilterColorCube : Filtering, Equatable {
   public let name: String
   public let identifier: String
   public var amount: Double = 1
+    
+    public let filterImage:Image;
+    public let filterDimension:Int;
+    public let filterColorSpace: CGColorSpace;
 
   public init(
     name: String,
@@ -66,13 +70,66 @@ public struct FilterColorCube : Filtering, Equatable {
 
     self.name = name
     self.identifier = identifier
+    
+    self.filterImage = lutImage;
+    self.filterDimension = dimension;
+    self.filterColorSpace = colorSpace;
+    
+    
     self.filter = ColorCube.makeColorCubeFilter(lutImage: lutImage, dimension: dimension, colorSpace: colorSpace)
+//    print("FilterColorCube init...")
   }
+    
+    /*
+    public mutating func setFilterAlpha(alpha:Float)
+    {
+        self.filterAlpha = alpha;
+        print("setFilterAlpha alpha:"+String(self.filterAlpha));
+    }
+ */
 
-  public func apply(to image: CIImage, sourceImage: CIImage) -> CIImage {
+  public func apply(to image: CIImage, sourceImage: CIImage,filterAlpha:CGFloat) -> CIImage {
 
     let f = filter.copy() as! CIFilter
 
+    /*
+    let lutImage_temp:Image;
+    if(filterAlpha==1.0)
+    {
+        print("filterAlpha==1.0...");
+        lutImage_temp = filterImage;
+    }else{
+        lutImage_temp = filterImage.alpha(CGFloat(filterAlpha));
+    }
+    print("filterAlpha:"+String(filterAlpha));
+    
+    let f = ColorCube.makeColorCubeFilter(lutImage: lutImage_temp, dimension: filterDimension, colorSpace: filterColorSpace)
+    
+    
+    let data = ColorCube.cubeData(
+      lutImage: filterImage,
+      dimension: filterDimension,
+      colorSpace: filterColorSpace
+    )!
+    
+    f.setValue(data, forKeyPath: "inputCubeData")
+     */
+    
+    if(filterAlpha==1.0)
+    {
+        print("filterAlpha--1--:1.0");
+    }else{
+        print("filterAlpha--2--:is not 1.0");
+        let lutImage_temp = filterImage.alpha(CGFloat(filterAlpha));
+        let data = ColorCube.cubeData(
+          lutImage: lutImage_temp,
+          dimension: filterDimension,
+          colorSpace: filterColorSpace
+        )!
+        
+        f.setValue(data, forKeyPath: "inputCubeData")
+    }
+    
     f.setValue(image, forKeyPath: kCIInputImageKey)
     if let colorSpace = image.colorSpace {
       f.setValue(colorSpace, forKeyPath: "inputColorSpace")

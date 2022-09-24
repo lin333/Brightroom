@@ -37,10 +37,12 @@ public final class PixelEditContext {
     case setTitle(String)
     case setMode(PixelEditViewController.Mode)
     case endAdjustment(save: Bool)
+    case setMaskingBrushSize(size: CGFloat)
     case endMasking(save: Bool)
     case removeAllMasking
 
     case setFilter((inout EditingStack.Edit.Filters) -> Void)
+    case setFilterAlpha(alpha:Float)
 
     case commit
     case revert
@@ -60,7 +62,7 @@ public final class PixelEditContext {
   }
 }
 
-public final class PixelEditViewController : UIViewController {
+  public final class PixelEditViewController : UIViewController {
   
   public final class Callbacks {
     public var didEndEditing: (PixelEditViewController, EditingStack) -> Void = { _, _ in }
@@ -112,6 +114,9 @@ public final class PixelEditViewController : UIViewController {
   
   private var aspectConstraint: NSLayoutConstraint?
 
+    private let imageW = 0
+    private let imageH = 0;
+
   private lazy var doneButton = UIBarButtonItem(
     title: doneButtonTitle,
     style: .done,
@@ -160,6 +165,7 @@ public final class PixelEditViewController : UIViewController {
     self.options = options
     self.colorCubeStorage = colorCubeStorage
     self.doneButtonTitle = doneButtonTitle
+    print("doneButtonTitle:"+doneButtonTitle);
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -190,12 +196,14 @@ public final class PixelEditViewController : UIViewController {
         let guide = UILayoutGuide()
         
         view.addLayoutGuide(guide)
-
+        
         view.addSubview(editContainerView)
         view.addSubview(controlContainerView)
         
-        editContainerView.accessibilityIdentifier = "app.muukii.pixel.editContainerView"
-        controlContainerView.accessibilityIdentifier = "app.muukii.pixel.controlContainerView"
+//        controlContainerView.backgroundColor = UIColor.red
+        
+        editContainerView.accessibilityIdentifier = "pixel.editContainerView"
+        controlContainerView.accessibilityIdentifier = "pixel.controlContainerView"
 
         editContainerView.translatesAutoresizingMaskIntoConstraints = false
         controlContainerView.translatesAutoresizingMaskIntoConstraints = false
@@ -204,7 +212,7 @@ public final class PixelEditViewController : UIViewController {
           guide.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
           guide.rightAnchor.constraint(equalTo: view.rightAnchor),
           guide.leftAnchor.constraint(equalTo: view.leftAnchor),
-          guide.widthAnchor.constraint(equalTo: guide.heightAnchor, multiplier: 1),
+          guide.widthAnchor.constraint(equalTo: guide.heightAnchor, multiplier: 1.0),
           
           {
             let c = editContainerView.topAnchor.constraint(equalTo: guide.topAnchor)
@@ -230,7 +238,7 @@ public final class PixelEditViewController : UIViewController {
           editContainerView.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
           editContainerView.centerYAnchor.constraint(equalTo: guide.centerYAnchor),
           
-          controlContainerView.topAnchor.constraint(equalTo: guide.bottomAnchor),
+          controlContainerView.topAnchor.constraint(equalTo: guide.bottomAnchor,constant: 20),
           controlContainerView.rightAnchor.constraint(equalTo: view.rightAnchor),
           controlContainerView.leftAnchor.constraint(equalTo: view.leftAnchor),
           {
@@ -251,7 +259,8 @@ public final class PixelEditViewController : UIViewController {
       }
 
       edit: do {
-
+        print("edit.....");
+        
         [
           adjustmentView,
           previewView,
@@ -270,7 +279,6 @@ public final class PixelEditViewController : UIViewController {
       }
 
       control: do {
-
         controlContainerView.addSubview(stackView)
 
         stackView.frame = stackView.bounds
@@ -343,6 +351,7 @@ public final class PixelEditViewController : UIViewController {
   private func didTapDoneButton() {
 
     callbacks.didEndEditing(self, editingStack)
+    print("点击完成")
     delegate?.pixelEditViewController(self, didEndEditing: editingStack)
   }
   
@@ -357,7 +366,7 @@ public final class PixelEditViewController : UIViewController {
     
     switch mode {
     case .adjustment:
-
+        print("set mode:adjustment");
       navigationItem.rightBarButtonItem = nil
       navigationItem.leftBarButtonItem = nil
 
@@ -371,7 +380,7 @@ public final class PixelEditViewController : UIViewController {
       updateAdjustmentUI()
 
     case .masking:
-
+        print("set mode:masking");
       navigationItem.rightBarButtonItem = nil
       navigationItem.leftBarButtonItem = nil
       didReceive(action: .setTitle(L10n.editMask))
@@ -387,7 +396,7 @@ public final class PixelEditViewController : UIViewController {
       }
 
     case .editing:
-
+        print("set mode:editing");
       navigationItem.rightBarButtonItem = nil
       navigationItem.leftBarButtonItem = nil
 
@@ -398,7 +407,7 @@ public final class PixelEditViewController : UIViewController {
       maskingView.isUserInteractionEnabled = false
 
     case .preview:
-
+        print("set mode:preview");
       navigationItem.setHidesBackButton(true, animated: false)
       navigationItem.rightBarButtonItem = doneButton
       navigationItem.leftBarButtonItem = cancelButton
@@ -468,15 +477,27 @@ public final class PixelEditViewController : UIViewController {
       syncUI(edit: editingStack.currentEdit)
     case .setFilter(let closure):
       editingStack.set(filters: closure)
+    case .setFilterAlpha(let alpha):
+        editingStack.setFilterAlpha(alpha: alpha);
     case .commit:
       editingStack.commit()
     case .undo:
       editingStack.undo()
     case .revert:
       editingStack.revert()
+    case .setMaskingBrushSize(size: let size):
+        maskingView.brush = .init(color: maskingView.brush.color, width: size)
+        
     }
   }
-
+    public override var preferredStatusBarStyle: UIStatusBarStyle
+    {
+        return .default
+    }
+    public override var prefersStatusBarHidden: Bool
+    {
+        return false
+    }
 }
 
 extension PixelEditViewController : EditingStackDelegate {
@@ -495,7 +516,6 @@ extension PixelEditViewController : EditingStackDelegate {
     
     syncUI(edit: edit)
     stackView.notify(changedEdit: edit)
-    
   }
 
 }

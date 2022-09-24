@@ -35,7 +35,7 @@ public struct FilterUnsharpMask: Filtering, Equatable, Codable {
     
   }
   
-  public func apply(to image: CIImage, sourceImage: CIImage) -> CIImage {
+  public func apply(to image: CIImage, sourceImage: CIImage,filterAlpha:CGFloat) -> CIImage {
     
     let _radius = RadiusCalculator.radius(value: radius, max: FilterUnsharpMask.Params.radius.max, imageExtent: image.extent)
     
