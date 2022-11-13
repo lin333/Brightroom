@@ -51,4 +51,20 @@ public struct L10nStorage {
   public init() {
     
   }
+    
+    func getCurrentLanguage() -> String {
+        let languages = UserDefaults.standard.stringArray(forKey: "AppleLanguages")
+        if languages![0].hasPrefix("zh") {
+            return "zh-Hans"
+        }
+        else if languages![0].hasPrefix("en") {
+            return "en"
+        }
+        else if languages![0].hasPrefix("zh-Hant") {
+            return "zh-Hans"
+        }
+        else {
+            return "en"
+        }
+    }
 }

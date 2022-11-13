@@ -90,9 +90,14 @@ final class RootControl : RootControlBase {
 
     body: do {
 
-      filtersButton.setTitle(L10n.filter, for: .normal)
-      editButton.setTitle(L10n.edit, for: .normal)
-
+        if L10n.getCurrentLanguage() == "en" {
+            filtersButton.setTitle(L10n.filter, for: .normal)
+            editButton.setTitle(L10n.edit, for: .normal)
+        }
+        else {
+            filtersButton.setTitle("滤镜", for: .normal)
+            editButton.setTitle("编辑", for: .normal)
+        }
       filtersButton.tintColor = .clear
       editButton.tintColor = .clear
 

@@ -365,7 +365,13 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
 
     open func set(originalImage: CIImage) {
       
-      nameLabel.text = L10n.normal
+        if L10n.getCurrentLanguage() == "en" {
+            nameLabel.text = L10n.normal
+        }
+        else {
+            nameLabel.text = "无滤镜"
+        }
+      
       imageView.image = UIImage(ciImage: originalImage, scale: contentScaleFactor, orientation: .up)
     }
     
