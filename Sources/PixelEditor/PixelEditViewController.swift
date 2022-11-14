@@ -408,8 +408,23 @@ public final class PixelEditContext {
 
     case .preview:
         print("set mode:preview");
-      navigationItem.setHidesBackButton(true, animated: false)
-      navigationItem.rightBarButtonItem = doneButton
+        navigationItem.setHidesBackButton(true, animated: false)
+        
+        if (L10n.getCurrentLanguage() == "en") {
+            doneButton.title = doneButtonTitle
+        }
+        else {
+            doneButton.title = "完成"
+        }
+        navigationItem.rightBarButtonItem = doneButton
+        
+        if (L10n.getCurrentLanguage() == "en") {
+            cancelButton.title = L10n.cancel
+        }
+        else {
+            cancelButton.title = "取消"
+        }
+        
       navigationItem.leftBarButtonItem = cancelButton
       
       didReceive(action: .setTitle(""))
@@ -421,7 +436,7 @@ public final class PixelEditContext {
       maskingView.isUserInteractionEnabled = false
       
       if maskingView.image != editingStack.previewImage {
-        maskingView.image = editingStack.previewImage
+          maskingView.image = editingStack.previewImage
       }
 
     }
