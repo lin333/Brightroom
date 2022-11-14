@@ -49,7 +49,13 @@ public struct L10nStorage {
   public var clear = "Clear"
   
   public init() {
-    
+      if getCurrentLanguage() == "en" {
+          
+      }
+      else {
+          self.done = "完成"
+          self.cancel = "取消"
+      }
   }
     
     func getCurrentLanguage() -> String {
