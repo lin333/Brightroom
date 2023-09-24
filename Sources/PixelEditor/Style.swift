@@ -26,8 +26,9 @@ public struct Style {
   public static let `default` = Style()
 
   public struct Control {
-
-    public var backgroundColor = UIColor(white: 0.98, alpha: 1)
+//      public var backgroundColor = UIColor(white: 0.98, alpha: 1)
+//      public var backgroundColor = UIColor.blue
+      public var backgroundColor = UIColor(white: 0, alpha: 1)
 
     public init() {
 
@@ -37,6 +38,8 @@ public struct Style {
   public var control = Control()
   
   public var black = UIColor(white: 0.05, alpha: 1)
+  public var white = UIColor(white: 1, alpha: 1)
+  public var clear = UIColor(white: 0.05, alpha: 0)
 
   public init() {
 

@@ -292,8 +292,8 @@ private final class _StepSlider: UISlider {
 
     layerContext.scaleBy(x: scale, y: scale)
 
-    UIColor(white: 0, alpha: 1).setStroke()
-    UIColor(white: 0, alpha: 1).setFill()
+    UIColor(white: 1, alpha: 1).setStroke()
+    UIColor(white: 1, alpha: 1).setFill()
 
     line: do {
       let path = UIBezierPath()
@@ -330,12 +330,12 @@ private final class _StepSlider: UISlider {
     minimumTrackTintColor = UIColor.clear
     maximumTrackTintColor = UIColor.clear
     setThumbImage(UIImage(named: "slider_thumb", in: bundle, compatibleWith: nil), for: [])
-    tintColor = Style.default.black
+    tintColor = Style.default.white
 
     let label = stepLabel
     label.backgroundColor = UIColor.clear
     label.font = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium)
-    label.textColor = UIColor.black
+    label.textColor = UIColor.white
     label.textAlignment = .center
 
     //20210329
@@ -367,11 +367,30 @@ private final class _StepSlider: UISlider {
       return
     }
 
-    for imageView in self.subviews where imageView is UIImageView {
+      
+    if #available(iOS 14, *) {
+        for imageView in self.subviews.first?.subviews ?? [] where imageView is UIImageView {
 
-      if imageView.bounds.width == imageView.bounds.height {
-        _trackImageView = imageView as? UIImageView
-      }
+          if imageView.bounds.width == imageView.bounds.height {
+            _trackImageView = imageView as? UIImageView
+          }
+        }
     }
+    else {
+        for imageView in self.subviews where imageView is UIImageView {
+
+          if imageView.bounds.width == imageView.bounds.height {
+            _trackImageView = imageView as? UIImageView
+          }
+        }
+    }
+
+
+//    for imageView in self.subviews where imageView is UIImageView {
+//
+//      if imageView.bounds.width == imageView.bounds.height {
+//        _trackImageView = imageView as? UIImageView
+//      }
+//    }
   }
 }

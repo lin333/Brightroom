@@ -191,7 +191,7 @@ public final class PixelEditContext {
           )
         }
 
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         
         let guide = UILayoutGuide()
         

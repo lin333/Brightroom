@@ -46,9 +46,27 @@ open class ShadowsControl : ShadowsControlBase {
     backgroundColor = Style.default.control.backgroundColor
     
     TempCode.layout(navigationView: navigationView, slider: slider, in: self)
-    
+      slider.isStepLabelHidden = false
     slider.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
     
+      
+      
+      let label = UILabel()
+      label.text = L10n.editShadows + "\n阴影"
+      label.textAlignment = .center
+      label.numberOfLines = 2;
+      label.translatesAutoresizingMaskIntoConstraints = false
+      label.textColor = UIColor.white
+      slider.addSubview(label)
+
+      NSLayoutConstraint.activate([
+        // Label 的约束
+        label.topAnchor.constraint(equalTo: slider.topAnchor, constant: -90),
+        label.centerXAnchor.constraint(equalTo: slider.centerXAnchor),
+        label.widthAnchor.constraint(equalToConstant: 200),
+        label.heightAnchor.constraint(equalToConstant: 50),
+      ])
+
     navigationView.didTapCancelButton = { [weak self] in
       
       self?.context.action(.revert)

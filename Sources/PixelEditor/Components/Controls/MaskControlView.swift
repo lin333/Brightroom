@@ -29,7 +29,7 @@ open class MaskControl : MaskControlBase {
   private let contentView = UIView()
   private let navigationView = NavigationView()
   
-  private let clearButton = UIButton.init(type: .system)
+  private let clearButton = UIButton.init(type: .custom)
   private let slider = StepSlider()
   private let sizeIndicator = UIView()
 
@@ -70,11 +70,12 @@ open class MaskControl : MaskControlBase {
         clearButton.topAnchor.constraint(equalTo: clearButton.superview!.topAnchor, constant: 16),        
         ])
       
-      clearButton.addTarget(self, action: #selector(didTapRemoveAllButton), for: .touchUpInside)
-      clearButton.setTitle(L10n.clear, for: .normal)
-      clearButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-      
+        clearButton.setTitle(L10n.clear, for: .normal)
+        clearButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        clearButton.setTitleColor(UIColor.white, for: .normal)
+        clearButton.setTitle(L10n.editMask + "\n蒙板", for: .normal)
     }
+            
     sizeSlider: do {
       slider.set(value: 0, min: -0.5, max: 0.5)
       slider.mode = .plusAndMinus

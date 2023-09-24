@@ -47,7 +47,7 @@ open class GaussianBlurControl : GaussianBlurControlBase {
     backgroundColor = Style.default.control.backgroundColor
 
     TempCode.layout(navigationView: navigationView, slider: slider, in: self)
-
+      slider.isStepLabelHidden = false
     slider.mode = .plus
     slider.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
 

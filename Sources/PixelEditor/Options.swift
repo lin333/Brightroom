@@ -50,7 +50,7 @@ extension Options {
       public var clarityControl: ClarityControlBase.Type = ClarityControl.self
       public var sharpenControl: SharpenControlBase.Type = SharpenControl.self
       
-      public var ignoredEditMenu: [EditMenu] = []
+    public var ignoredEditMenu: [EditMenu] = [EditMenu.mask,EditMenu.gaussianBlur]
       
       public init() {
         

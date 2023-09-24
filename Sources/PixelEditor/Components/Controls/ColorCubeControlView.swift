@@ -296,7 +296,7 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
         
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        nameLabel.textColor = Style.default.black
+        nameLabel.textColor = Style.default.white
         
       }
       
