@@ -76,7 +76,7 @@ open class ColorCubeControl : ColorCubeControlBase, UICollectionViewDelegateFlow
 
     backgroundColor = Style.default.control.backgroundColor
 
-    addSubview(sliderSensiti);
+//    addSubview(sliderSensiti);
     
     addSubview(collectionView)
     

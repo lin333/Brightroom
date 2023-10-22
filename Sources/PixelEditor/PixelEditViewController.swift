@@ -64,6 +64,9 @@ public final class PixelEditContext {
 
   public final class PixelEditViewController : UIViewController {
   
+      public var imageModel: Any? // 外部传入
+      public var waterMarkVC: UIViewController?
+      
   public final class Callbacks {
     public var didEndEditing: (PixelEditViewController, EditingStack) -> Void = { _, _ in }
     public var didCancelEditing: (PixelEditViewController) -> Void = { _ in }
@@ -200,8 +203,23 @@ public final class PixelEditContext {
         view.addSubview(editContainerView)
         view.addSubview(controlContainerView)
         
-//        controlContainerView.backgroundColor = UIColor.red
-        
+          let vc:UIViewController = waterMarkVC ?? UIViewController.init()
+          addChild(vc)
+          view.addSubview(vc.view);
+          vc.didMove(toParent: self)
+          vc.view.isHidden = true
+          
+          // 确保AutoresizingMaskIntoConstraints被禁用，否则使用Auto Layout会产生冲突
+          vc.view.translatesAutoresizingMaskIntoConstraints = false
+              
+          // 左右与父视图相等
+          NSLayoutConstraint.activate([
+            vc.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            vc.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            vc.view.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
+            vc.view.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor, constant: -50)
+          ])
+          
         editContainerView.accessibilityIdentifier = "pixel.editContainerView"
         controlContainerView.accessibilityIdentifier = "pixel.controlContainerView"
 
@@ -285,13 +303,14 @@ public final class PixelEditContext {
         stackView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
         stackView.push(
-          options.classes.control.rootControl.init(
+          options.classes.control.rootControl.init (
             context: context,
             colorCubeControl: options.classes.control.colorCubeControl.init(
               context: context,
               originalImage: editingStack.cubeFilterPreviewSourceImage,
               filters: editingStack.availableColorCubeFilters
-            )
+            ),
+            previewImageView:previewView
           ),
           animated: false
         )
@@ -326,8 +345,45 @@ public final class PixelEditContext {
       set(mode: mode)
     }
 
+      // 在合适的地方添加通知的观察者
+      NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: .customNotification, object: nil)
   }
     
+      
+      // 处理通知的方法
+      @objc func handleNotification(_ notification: Notification) {
+          // 处理通知的逻辑
+                
+          if let image = previewView.imageView.image {
+              // 如果 image 存在，进入这个代码块
+              let userInfo: [AnyHashable: Any] = ["watermarkImage": image]
+              let notification = Notification(name: Notification.Name("updateWaterMarkNotification"), object: nil, userInfo: userInfo)
+              NotificationCenter.default.post(notification)
+          }
+          
+          let vc:UIViewController = waterMarkVC ?? UIViewController.init()
+
+          if let userInfo = notification.userInfo {
+              if let watermarketstatus = userInfo["watermarketstatus"] as? Bool {
+                  if watermarketstatus {
+                      vc.view.isHidden = false
+                  }
+                  else {
+                      vc.view.isHidden = true
+                  }
+              }
+              else {
+                  vc.view.isHidden = true
+              }
+          }
+      }
+
+      // 在不需要通知时，记得移除观察者
+      deinit {
+          NotificationCenter.default.removeObserver(self, name: .customNotification, object: nil)
+      }
+
+      
   // MARK: - Private Functions
   
   private func setAspect(_ size: CGSize) {
@@ -349,9 +405,7 @@ public final class PixelEditContext {
 
   @objc
   private func didTapDoneButton() {
-
     callbacks.didEndEditing(self, editingStack)
-    print("点击完成")
     delegate?.pixelEditViewController(self, didEndEditing: editingStack)
   }
   
@@ -533,4 +587,9 @@ extension PixelEditViewController : EditingStackDelegate {
     stackView.notify(changedEdit: edit)
   }
 
+}
+
+// 定义通知的名称
+public extension Notification.Name {
+    static let customNotification = Notification.Name("CustomNotification")
 }

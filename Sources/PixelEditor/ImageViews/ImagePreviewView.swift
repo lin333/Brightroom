@@ -21,8 +21,9 @@
 
 import Foundation
 
-final class ImagePreviewView : UIView {
-
+public class ImagePreviewView : UIView {
+//public var waterMarkVC: UIViewController?
+//    
   let originalImageView: UIImageView = .init()
   let imageView: UIImageView = .init()
   
@@ -67,19 +68,19 @@ final class ImagePreviewView : UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
     originalImageView.isHidden = false
     imageView.isHidden = true
   }
   
-  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesEnded(touches, with: event)
     originalImageView.isHidden = true
     imageView.isHidden = false
   }
   
-  override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesCancelled(touches, with: event)
     originalImageView.isHidden = true
     imageView.isHidden = false

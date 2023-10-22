@@ -19,11 +19,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import Foundation
+import PixelEngine
 
 open class RootControlBase : ControlBase {
 
-  public required init(context: PixelEditContext, colorCubeControl: ColorCubeControlBase) {
-    super.init(context: context)
+    let preImageView: ImagePreviewView
+    
+    public required init(context: PixelEditContext, colorCubeControl: ColorCubeControlBase, previewImageView: ImagePreviewView) {
+        self.preImageView = previewImageView
+        super.init(context: context)
   }
 }
 
@@ -32,6 +36,7 @@ final class RootControl : RootControlBase {
   public enum DisplayType {
     case filter
     case edit
+    case waterMark
   }
 
   public var displayType: DisplayType = .filter {
@@ -45,6 +50,8 @@ final class RootControl : RootControlBase {
 
   public let editButton = UIButton(type: .system)
 
+  public let waterMarkButton = UIButton(type: .system)
+
   private let containerView = UIView()
 
   public let colorCubeControl: ColorCubeControlBase
@@ -53,17 +60,16 @@ final class RootControl : RootControlBase {
 
   // MARK: - Initializers
 
-  public required init(context: PixelEditContext, colorCubeControl: ColorCubeControlBase) {
-
+  public required init(context: PixelEditContext, colorCubeControl: ColorCubeControlBase, previewImageView: ImagePreviewView) {
     self.colorCubeControl = colorCubeControl
 
-    super.init(context: context, colorCubeControl: colorCubeControl)
+    super.init(context: context, colorCubeControl: colorCubeControl, previewImageView: previewImageView)
 
     backgroundColor = Style.default.control.backgroundColor
 
     layout: do {
 
-      let stackView = UIStackView(arrangedSubviews: [filtersButton, editButton])
+      let stackView = UIStackView(arrangedSubviews: [filtersButton, editButton, waterMarkButton])
       stackView.axis = .horizontal
       stackView.distribution = .fillEqually
 
@@ -93,25 +99,32 @@ final class RootControl : RootControlBase {
         if L10n.getCurrentLanguage() == "en" {
             filtersButton.setTitle(L10n.filter, for: .normal)
             editButton.setTitle(L10n.edit, for: .normal)
+            waterMarkButton.setTitle("sss", for: .normal)
         }
         else {
             filtersButton.setTitle("滤镜", for: .normal)
             editButton.setTitle("编辑", for: .normal)
+            waterMarkButton.setTitle("sss", for: .normal)
         }
       filtersButton.tintColor = .clear
       editButton.tintColor = .clear
-
+      waterMarkButton.tintColor = .clear
+        
       filtersButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
       editButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
+        waterMarkButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
 
       filtersButton.setTitleColor(.white, for: .selected)
       editButton.setTitleColor(.white, for: .selected)
-
+        waterMarkButton.setTitleColor(.white, for: .selected)
+        
       filtersButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
       editButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
+        waterMarkButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
 
       filtersButton.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
       editButton.addTarget(self, action: #selector(didTapEditButton), for: .touchUpInside)
+        waterMarkButton.addTarget(self, action: #selector(didTapWaterMarkButton), for: .touchUpInside)
     }
 
   }
@@ -138,13 +151,20 @@ final class RootControl : RootControlBase {
     displayType = .edit
   }
 
+    @objc
+    private func didTapWaterMarkButton() {
+        displayType = .waterMark
+        
+    }
+
   private func set(displayType: DisplayType) {
 
     containerView.subviews.forEach { $0.removeFromSuperview() }
 
     filtersButton.isSelected = false
     editButton.isSelected = false
-
+    waterMarkButton.isSelected = false
+      
     switch displayType {
     case .filter:
       
@@ -152,7 +172,11 @@ final class RootControl : RootControlBase {
       colorCubeControl.autoresizingMask = [.flexibleWidth, .flexibleHeight]
       containerView.addSubview(colorCubeControl)
       subscribeChangedEdit(to: colorCubeControl)
-      
+
+        let watermarketstatus = false // 你的bool值
+        let userInfo: [AnyHashable: Any] = ["watermarketstatus": watermarketstatus]
+        let notification = Notification(name: .customNotification, object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
       filtersButton.isSelected = true
 
     case .edit:
@@ -163,8 +187,23 @@ final class RootControl : RootControlBase {
       containerView.addSubview(editView)
       subscribeChangedEdit(to: editView)
     
+        let watermarketstatus = false // 你的bool值
+        let userInfo: [AnyHashable: Any] = ["watermarketstatus": watermarketstatus]
+        let notification = Notification(name: .customNotification, object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
+        
       editButton.isSelected = true
+    case .waterMark:
+        // 在适当的地方发送通知
+        waterMarkButton.isSelected = true
+        
+        let watermarketstatus = true // 你的bool值
+        let userInfo: [AnyHashable: Any] = ["watermarketstatus": watermarketstatus]
+        let notification = Notification(name: .customNotification, object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
+
     }
+  
   }
 
 }
