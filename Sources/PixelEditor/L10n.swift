@@ -53,7 +53,7 @@ public struct L10nStorage {
           
       }
       else {
-          self.done = "完成"
+          self.done = "保存"
           self.cancel = "取消"
       }
   }

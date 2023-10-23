@@ -46,11 +46,11 @@ final class RootControl : RootControlBase {
     }
   }
 
-  public let filtersButton = UIButton(type: .system)
+  public let filtersButton = UIButton(type: .custom)
 
-  public let editButton = UIButton(type: .system)
+  public let editButton = UIButton(type: .custom)
 
-  public let waterMarkButton = UIButton(type: .system)
+  public let waterMarkButton = UIButton(type: .custom)
 
   private let containerView = UIView()
 
@@ -95,32 +95,43 @@ final class RootControl : RootControlBase {
     }
 
     body: do {
-
-        if L10n.getCurrentLanguage() == "en" {
-            filtersButton.setTitle(L10n.filter, for: .normal)
-            editButton.setTitle(L10n.edit, for: .normal)
-            waterMarkButton.setTitle("sss", for: .normal)
-        }
-        else {
-            filtersButton.setTitle("滤镜", for: .normal)
-            editButton.setTitle("编辑", for: .normal)
-            waterMarkButton.setTitle("sss", for: .normal)
-        }
-      filtersButton.tintColor = .clear
-      editButton.tintColor = .clear
-      waterMarkButton.tintColor = .clear
+//        if L10n.getCurrentLanguage() == "en" {
+//            filtersButton.setTitle(L10n.filter, for: .normal)
+//            editButton.setTitle(L10n.edit, for: .normal)
+//            waterMarkButton.setTitle("sss", for: .normal)
+//        }
+//        else {
+//            filtersButton.setTitle("滤镜", for: .normal)
+//            editButton.setTitle("编辑", for: .normal)
+//            waterMarkButton.setTitle("sss", for: .normal)
+//        }
+                
         
-      filtersButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
-      editButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
-        waterMarkButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
+        filtersButton.setImage(UIImage(named: "editorfiltericonwhite", in: bundle, compatibleWith: nil)!, for: .normal)
+        filtersButton.setImage(UIImage(named: "editorfiltericonyellow", in: bundle, compatibleWith: nil)!, for: .selected)
 
-      filtersButton.setTitleColor(.white, for: .selected)
-      editButton.setTitleColor(.white, for: .selected)
-        waterMarkButton.setTitleColor(.white, for: .selected)
+        editButton.setImage(UIImage(named: "editoradjusticonwhite", in: bundle, compatibleWith: nil)!, for: .normal)
+        editButton.setImage(UIImage(named: "editoradjusticonyellow", in: bundle, compatibleWith: nil)!, for: .selected)
         
-      filtersButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
-      editButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
-        waterMarkButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
+        waterMarkButton.setImage(UIImage(named: "Frameiconwhite", in: bundle, compatibleWith: nil)!, for: .normal)
+        waterMarkButton.setImage(UIImage(named: "Frameiconyellow", in: bundle, compatibleWith: nil)!, for: .selected)
+
+        
+//      filtersButton.tintColor = .clear
+//      editButton.tintColor = .clear
+//      waterMarkButton.tintColor = .clear
+//        
+//      filtersButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
+//      editButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
+//        waterMarkButton.setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .normal)
+//
+//      filtersButton.setTitleColor(.white, for: .selected)
+//      editButton.setTitleColor(.white, for: .selected)
+//        waterMarkButton.setTitleColor(.white, for: .selected)
+//        
+//      filtersButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
+//      editButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
+//        waterMarkButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: 17)
 
       filtersButton.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
       editButton.addTarget(self, action: #selector(didTapEditButton), for: .touchUpInside)

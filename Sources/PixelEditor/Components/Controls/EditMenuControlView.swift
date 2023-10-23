@@ -95,7 +95,7 @@ public enum EditMenu: CaseIterable {
     }()
     
     public lazy var highlightsButton: ButtonView = {
-        let button = ButtonView(name: L10n.editHighlights + "\n高光", image: UIImage(named: "highlights", in: bundle, compatibleWith: nil)!)
+        let button = ButtonView(name: L10n.editHighlights + "\n高光", image: UIImage(named: "editor-highlight", in: bundle, compatibleWith: nil)!)
       button.addTarget(self, action: #selector(highlights), for: .touchUpInside)
       return button
     }()

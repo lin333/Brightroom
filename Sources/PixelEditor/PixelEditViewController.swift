@@ -468,7 +468,7 @@ public final class PixelEditContext {
             doneButton.title = doneButtonTitle
         }
         else {
-            doneButton.title = "完成"
+            doneButton.title = "保存"
         }
         navigationItem.rightBarButtonItem = doneButton
         
